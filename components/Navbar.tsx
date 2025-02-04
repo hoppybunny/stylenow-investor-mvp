@@ -52,7 +52,7 @@ export default async function Navbar() {
           </Link>
           {packsIsEnabled && (
             <Link href="/overview/packs">
-              <Button variant={"ghost"}>Packs</Button>
+              <Button variant={"ghost"}>Gallery</Button>
             </Link>
           )}
           {stripeIsConfigured && (

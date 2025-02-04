@@ -1,3 +1,8 @@
+import { cookies } from "next/headers";
+import Link from "next/link";
+import { redirect } from "next/navigation";
+import { FaArrowLeft } from "react-icons/fa";
+
 import Login from "@/app/login/page";
 import { Icons } from "@/components/icons";
 import ClientSideModel from "@/components/realtime/ClientSideModel";
@@ -5,10 +10,6 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Database } from "@/types/supabase";
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
-import { cookies } from "next/headers";
-import Link from "next/link";
-import { redirect } from "next/navigation";
-import { FaArrowLeft } from "react-icons/fa";
 
 export const dynamic = "force-dynamic";
 
@@ -43,12 +44,6 @@ export default async function Index({ params }: { params: { id: string } }) {
   return (
     <div id="train-model-container" className="w-full h-full">
       <div className="flex flex-row gap-4">
-        <Link href="/overview" className="text-xs w-fit">
-          <Button variant={"outline"} className="text-xs" size="sm">
-            <FaArrowLeft className="mr-2" />
-            Go Back
-          </Button>
-        </Link>
         <div className="flex flex-row gap-2 align-middle text-center items-center pb-4">
           <h1 className="text-xl">{model.name}</h1>
           <div>

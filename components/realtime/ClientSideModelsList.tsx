@@ -1,89 +1,38 @@
-"use client";
-import { Button } from "@/components/ui/button";
-import { Database } from "@/types/supabase";
-import { modelRowWithSamples } from "@/types/utils";
-import { createClient } from "@supabase/supabase-js";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import Link from "next/link";
-import { useEffect, useState } from "react";
-import { FaImages } from "react-icons/fa";
-import ModelsTable from "../ModelsTable";
+import { FaArrowLeft } from "react-icons/fa";
+
+import TrainModelZone from "@/components/TrainModelZone";
+import { Button } from "@/components/ui/button";
 
 const packsIsEnabled = process.env.NEXT_PUBLIC_TUNE_TYPE === "packs";
 
-export const revalidate = 0;
-
-type ClientSideModelsListProps = {
-  serverModels: modelRowWithSamples[] | [];
-};
-
-export default function ClientSideModelsList({
-  serverModels,
-}: ClientSideModelsListProps) {
-  const supabase = createClient<Database>(
-    process.env.NEXT_PUBLIC_SUPABASE_URL as string,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY as string
-  );
-  const [models, setModels] = useState<modelRowWithSamples[]>(serverModels);
-
-  useEffect(() => {
-    const channel = supabase
-      .channel("realtime-models")
-      .on(
-        "postgres_changes",
-        { event: "*", schema: "public", table: "models" },
-        async (payload: any) => {
-          const samples = await supabase
-            .from("samples")
-            .select("*")
-            .eq("modelId", payload.new.id);
-
-          const newModel: modelRowWithSamples = {
-            ...payload.new,
-            samples: samples.data,
-          };
-
-          const dedupedModels = models.filter(
-            (model) => model.id !== payload.old?.id
-          );
-
-          setModels([...dedupedModels, newModel]);
-        }
-      )
-      .subscribe();
-
-    return () => {
-      supabase.removeChannel(channel);
-    };
-  }, [supabase, models, setModels]);
-
+export default async function Index({ params }: { params: { pack : string } }) {
+  
   return (
-    <div id="train-model-container" className="w-full">
-      {models && models.length > 0 && (
-        <div className="flex flex-col gap-4">
-          <div className="flex flex-row gap-4 w-full justify-between items-center text-center">
-            <h1>Your models</h1>
-            <Link href={packsIsEnabled ? "/overview/packs" : "/overview/models/train/raw-tune"} className="w-fit">
-              <Button size={"sm"}>
-                Train model
-              </Button>
-            </Link>
-          </div>
-          <ModelsTable models={models} />
-        </div>
-      )}
-      {models && models.length === 0 && (
-        <div className="flex flex-col gap-4 items-center">
-          <FaImages size={64} className="text-gray-500" />
-          <h1 className="text-2xl">
-            Get started by training your first model.
-          </h1>
-          <div>
-            <Link href={packsIsEnabled ? "/overview/packs" : "/overview/models/train/raw-tune"}>
-              <Button size={"lg"}>Train model</Button>
-            </Link>
-          </div>
-        </div>
-      )}
+    <div className="w-full max-w-2xl mx-auto">
+      <div
+        id="train-model-container"
+        className="flex flex-1 flex-col gap-2 px-2"
+      >
+        <Card>
+          <CardHeader>
+            <CardTitle>Train Model</CardTitle>
+            <CardDescription>
+              Choose a name, type, and upload some photos to get started.
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="grid gap-6">
+            <TrainModelZone />
+          </CardContent>
+        </Card>
+      </div>
     </div>
   );
 }

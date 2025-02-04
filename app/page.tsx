@@ -40,7 +40,7 @@ export default async function Index() {
             </p>
           </div>
           <div className="mt-4 text-gray-500">
-            <span>Already a member? </span>
+            <span>Already a user? </span>
             <Link className="text-blue-600 hover:underline" href="/login">
               Sign In
             </Link>

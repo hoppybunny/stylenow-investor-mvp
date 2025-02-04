@@ -1,5 +1,3 @@
-import PacksGalleryZone from "@/components/PacksGalleryZone";
-import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -8,8 +6,11 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import Link from "next/link";
-import { FaArrowLeft } from "react-icons/fa";
 import { redirect } from "next/navigation";
+import { FaArrowLeft } from "react-icons/fa";
+
+import ImageGallery from "@/components/ImageGallery";
+import { Button } from "@/components/ui/button";
 
 const packsIsEnabled = process.env.NEXT_PUBLIC_TUNE_TYPE === "packs";
 
@@ -25,21 +26,15 @@ export default async function Index() {
         id="train-model-container"
         className="flex flex-1 flex-col gap-2 px-2"
       >
-        <Link href="/overview" className="text-sm w-fit">
-          <Button variant={"outline"}>
-            <FaArrowLeft className="mr-2" />
-            Go Back
-          </Button>
-        </Link>
         <Card>
           <CardHeader>
-            <CardTitle>Packs Gallery</CardTitle>
+            <CardTitle>Image Gallery</CardTitle>
             <CardDescription>
-              Choose the type of images you would like to create.
+              Take a look at the images you've created
             </CardDescription>
           </CardHeader>
           <CardContent className="grid gap-6">
-            <PacksGalleryZone />
+            <ImageGallery />
           </CardContent>
         </Card>
       </div>
