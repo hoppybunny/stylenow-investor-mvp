@@ -1,6 +1,7 @@
+import { NextResponse } from "next/server";
+
 import { Database } from "@/types/supabase";
 import { createClient } from "@supabase/supabase-js";
-import { NextResponse } from "next/server";
 
 export const dynamic = "force-dynamic";
 
@@ -127,11 +128,12 @@ export async function POST(request: Request) {
   try {
     // Here we join all of the arrays into one.
     const allHeadshots = prompt.images;
+    const model_id_number = parseInt(model_id, 10);
     
     const { data: model, error: modelError } = await supabase
       .from("models")
       .select("*")
-      .eq("id", model_id)
+      .eq("id", model_id_number)
       .single();
 
     if (modelError) {
