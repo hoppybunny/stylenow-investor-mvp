@@ -1,7 +1,8 @@
-import { Database } from "@/types/supabase";
-import { createClient } from "@supabase/supabase-js";
 import { NextResponse } from "next/server";
 import { Resend } from "resend";
+
+import { Database } from "@/types/supabase";
+import { createClient } from "@supabase/supabase-js";
 
 export const dynamic = "force-dynamic";
 
@@ -133,14 +134,14 @@ export async function POST(request: Request) {
         html: `<h2>We're writing to notify you that your model training was successful! 1 credit has been used from your account.</h2>`,
       });
     }
-
+    const model_id_number = parseInt(model_id, 10);
     const { data: modelUpdated, error: modelUpdatedError } = await supabase
       .from("models")
       .update({
         modelId: `${tune.id}`,
         status: "finished",
       })
-      .eq("id", model_id)
+      .eq("id", model_id_number)
       .select();
 
     if (modelUpdatedError) {
