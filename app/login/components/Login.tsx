@@ -1,14 +1,16 @@
 "use client";
 
+import disposableDomains from "disposable-email-domains";
+import { useState } from "react";
+import { SubmitHandler, useForm } from "react-hook-form";
+import { AiOutlineGoogle } from "react-icons/ai";
+
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/components/ui/use-toast";
 import { Database } from "@/types/supabase";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
-import disposableDomains from "disposable-email-domains";
-import { useState } from "react";
-import { SubmitHandler, useForm } from "react-hook-form";
-import { AiOutlineGoogle } from "react-icons/ai";
+
 import { WaitingForMagicLink } from "./WaitingForMagicLink";
 
 type Inputs = {

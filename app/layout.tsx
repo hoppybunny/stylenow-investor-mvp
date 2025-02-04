@@ -1,13 +1,15 @@
+import { Suspense } from "react";
+
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
 import { Toaster } from "@/components/ui/toaster";
-import "./globals.css";
-import { Suspense } from "react";
 import { Analytics } from "@vercel/analytics/react";
 
+import "./globals.css";
+
 export const metadata = {
-  title: "Headshots AI",
-  description: "Generate awesome headshots in minutes using AI",
+  title: "Styled By Clara",
+  description: "See yourself in new outfits using AI",
 };
 
 export default function RootLayout({ children }: any) {

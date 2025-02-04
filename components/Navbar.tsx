@@ -1,6 +1,6 @@
-import { AvatarIcon } from "@radix-ui/react-icons";
-import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { cookies } from "next/headers";
+import Link from "next/link";
+import React from "react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -9,11 +9,13 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
-import Link from "next/link";
-import { Button } from "./ui/button";
-import React from "react";
+
 import { Database } from "@/types/supabase";
+import { AvatarIcon } from "@radix-ui/react-icons";
+import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
+
 import ClientSideCredits from "./realtime/ClientSideCredits";
+import { Button } from "./ui/button";
 
 export const dynamic = "force-dynamic";
 
@@ -40,7 +42,7 @@ export default async function Navbar() {
     <div className="flex w-full px-4 lg:px-40 py-4 items-center border-b text-center gap-8 justify-between">
       <div className="flex gap-2 h-full">
         <Link href="/">
-          <h2 className="font-bold">Headshots AI</h2>
+          <h2 className="font-bold">Styled By Clara</h2>
         </Link>
       </div>
       {user && (
