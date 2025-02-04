@@ -50,11 +50,9 @@ export default async function Navbar() {
           <Link href="/overview">
             <Button variant={"ghost"}>Home</Button>
           </Link>
-          {packsIsEnabled && (
-            <Link href="/overview/packs">
+            <Link href="/overview/gallery">
               <Button variant={"ghost"}>Gallery</Button>
             </Link>
-          )}
           {stripeIsConfigured && (
             <Link href="/get-credits">
               <Button variant={"ghost"}>Get Credits</Button>
