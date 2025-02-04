@@ -5,12 +5,9 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import Link from "next/link";
 import { redirect } from "next/navigation";
-import { FaArrowLeft } from "react-icons/fa";
 
 import ImageGallery from "@/components/ImageGallery";
-import { Button } from "@/components/ui/button";
 
 const packsIsEnabled = process.env.NEXT_PUBLIC_TUNE_TYPE === "packs";
 
