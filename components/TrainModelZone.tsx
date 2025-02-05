@@ -22,6 +22,7 @@ import { useToast } from "@/components/ui/use-toast";
 import { fileUploadFormSchema } from "@/types/zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { createClient } from "@supabase/supabase-js";
+import { v4 as uuidv4 } from 'uuid';
 
 const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!);
 
@@ -48,9 +49,11 @@ export default function TrainModelZone() {
   const uploadToSupabase = useCallback(async () => {
     setIsLoading(true);
     const uploadedUrls = [];
+    const userId = (await supabase.auth.getUser()).data.user?.id;
 
     for (const file of files) {
-      const { data, error } = await supabase.storage.from("uploads").upload(`models/${file.name}`, file);
+      const uuidFilename = uuidv4();
+      const { data, error } = await supabase.storage.from("uploads").upload(`${userId}/${uuidFilename}`, file);
       if (error) {
         toast({ title: "Upload failed", description: error.message, duration: 5000 });
         setIsLoading(false);
