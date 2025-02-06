@@ -21,10 +21,11 @@ import { Input } from "@/components/ui/input";
 import { useToast } from "@/components/ui/use-toast";
 import { fileUploadFormSchema } from "@/types/zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { createClient } from "@supabase/supabase-js";
+import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 import { v4 as uuidv4 } from 'uuid';
 
-const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!);
+const supabase = createClientComponentClient()
+
 
 type FormInput = z.infer<typeof fileUploadFormSchema>;
 
@@ -49,7 +50,8 @@ export default function TrainModelZone() {
   const uploadToSupabase = useCallback(async () => {
     setIsLoading(true);
     const uploadedUrls = [];
-    const userId = (await supabase.auth.getUser()).data.user?.id;
+    const { data: { user } } = await supabase.auth.getUser()
+    const userId = user?.id;
 
     for (const file of files) {
       const uuidFilename = uuidv4();
