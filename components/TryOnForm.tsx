@@ -31,9 +31,19 @@ interface StorageImage {
 
 const supabase = createClientComponentClient()
 
+// Update URL validation function to handle URLs without protocol
+const isValidUrl = (url: string) => {
+  try {
+    new URL(url);
+    return true;
+  } catch {
+    return false;
+  }
+};
+
 export default function TryOnForm() {
   const router = useRouter();
-  const { register, handleSubmit, watch, setValue } = useForm<FormDataType>({
+  const { register, handleSubmit, watch, setValue, formState: { errors } } = useForm<FormDataType>({
     defaultValues: {
       imageSelection: "upload", // Default to upload option
       linkSelection: "topBottom" // Default to top/bottom option
@@ -104,7 +114,6 @@ export default function TryOnForm() {
   const uploadToSupabase = useCallback(async () => {
 
     if (!uploadedFile) {
-      //TODO: alert about missing model image
       setIsLoading(false);
       throw new Error("Please upload an image")
     }
@@ -132,6 +141,54 @@ export default function TryOnForm() {
 
   const onSubmit: SubmitHandler<FormDataType> = async (data) => {
     try {
+      // Image validation
+      if (data.imageSelection === "upload" && !uploadedFile) {
+        toast({
+          title: "Error",
+          description: "Please upload an image",
+          variant: "destructive"
+        });
+        return;
+      }
+
+      if (data.imageSelection === "select" && !selectedImage) {
+        toast({
+          title: "Error",
+          description: "Please select an image from previous uploads",
+          variant: "destructive"
+        });
+        return;
+      }
+
+      // Link validation
+      const hasValidJacket = data.jacketLink && isValidUrl(data.jacketLink);
+      const hasValidShoes = data.shoesLink && isValidUrl(data.shoesLink);
+
+      if (data.linkSelection === "topBottom") {
+        const hasValidTop = data.topLink && isValidUrl(data.topLink);
+        const hasValidBottom = data.bottomLink && isValidUrl(data.bottomLink);
+        
+        if (!hasValidTop && !hasValidBottom && !hasValidJacket && !hasValidShoes) {
+          toast({
+            title: "Error",
+            description: "Please provide at least one valid garment URL",
+            variant: "destructive"
+          });
+          return;
+        }
+      } else if (data.linkSelection === "fullBody") {
+        const hasValidFullBody = data.fullBodyLink && isValidUrl(data.fullBodyLink);
+        
+        if (!hasValidFullBody && !hasValidJacket && !hasValidShoes) {
+          toast({
+            title: "Error",
+            description: "Please provide at least one valid garment URL",
+            variant: "destructive"
+          });
+          return;
+        }
+      }
+
       const galleryDataBaseEntry = {
         base_photo: "",
         top_garment: "",
@@ -199,9 +256,21 @@ export default function TryOnForm() {
 
   };
 
+  const scrollToGuidelines = () => {
+    const element = document.getElementById("photo-guidelines");
+    if (element) {
+      element.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="w-full mx-auto p-6 border rounded-lg shadow-md">
-      <h2 className="text-xl font-bold mb-4">Model Image</h2>
+      <h2 className="text-xl font-bold mb-4 flex items-center">
+        Model Image
+        <span onClick={scrollToGuidelines} className="ml-2 cursor-pointer" title="View Photo Guidelines">
+          ❓
+        </span>
+      </h2> 
       <p className="text-sm text-gray-500 mb-2">Choose either to upload a new image OR select from previously uploaded images.</p>
       <div className="mb-4">
         <label className="flex items-center">
@@ -211,8 +280,8 @@ export default function TryOnForm() {
           <input type="radio" value="select" {...register("imageSelection")} /> Select from previous images
         </label>
       </div>
-      <div className="flex gap-4">
-        <div {...getRootProps()} className={`border-2 w-full border-dashed p-6 rounded-lg cursor-pointer text-center ${uploadedFile ? 'border-blue-500' : ''}`} hidden={watch("imageSelection") !== "upload"}>
+      <div className="flex gap-4 h-36 items-center">
+        <div {...getRootProps()} className={`${watch("imageSelection") == "upload" ? "flex" : "hidden"} flex items-center justify-center h-32 border-2 w-full border-dashed p-6 rounded-lg cursor-pointer text-center ${uploadedFile ? 'border-blue-500' : ''}`}>
           <input {...getInputProps()} />
           {uploadedFile ? (
             <img src={URL.createObjectURL(uploadedFile)} alt="Uploaded" className="w-full h-32 object-contain rounded-lg" />
@@ -250,9 +319,7 @@ export default function TryOnForm() {
           </div>
         </div>
       </div>
-
       <h2 className="text-xl font-bold mt-6 mb-4">Try-On Links</h2>
-      <p className="text-sm text-gray-500 mb-2">Choose either to input Top/Bottom links OR a Full-body link.</p>
       <div className="mb-4">
         <label className="flex items-center">
           <input
@@ -271,23 +338,64 @@ export default function TryOnForm() {
         </label>
       </div>
       <div className="mb-4" hidden={watch("linkSelection") !== "topBottom"}>
-        <input {...register("topLink")} type="text" placeholder="Top Link" className="w-full p-2 border rounded-md" />
-        <input {...register("bottomLink")} type="text" placeholder="Bottom Link" className="w-full p-2 border rounded-md mt-2" />
+        <input 
+          {...register("topLink", {
+            validate: (value) => !value || isValidUrl(value) || "Please enter a valid URL"
+          })}
+          type="text" 
+          placeholder="Top Link" 
+          className={`w-full p-2 border rounded-md ${errors.topLink ? 'border-red-500' : ''}`}
+        />
+        {errors.topLink && <p className="text-red-500 text-sm mt-1">{errors.topLink.message}</p>}
+        
+        <input 
+          {...register("bottomLink", {
+            validate: (value) => !value || isValidUrl(value) || "Please enter a valid URL"
+          })}
+          type="text" 
+          placeholder="Bottom Link" 
+          className={`w-full p-2 border rounded-md mt-2 ${errors.bottomLink ? 'border-red-500' : ''}`}
+        />
+        {errors.bottomLink && <p className="text-red-500 text-sm mt-1">{errors.bottomLink.message}</p>}
       </div>
       <div className="mb-4" hidden={watch("linkSelection") !== "fullBody"}>
-        <input {...register("fullBodyLink")} type="text" placeholder="Full Body Link" className="w-full p-2 border rounded-md" />
+        <input 
+          {...register("fullBodyLink", {
+            validate: (value) => !value || isValidUrl(value) || "Please enter a valid URL"
+          })}
+          type="text" 
+          placeholder="Full Body Link" 
+          className={`w-full p-2 border rounded-md ${errors.fullBodyLink ? 'border-red-500' : ''}`}
+        />
+        {errors.fullBodyLink && <p className="text-red-500 text-sm mt-1">{errors.fullBodyLink.message}</p>}
       </div>
 
       <h2 className="text-xl font-bold mt-6 mb-4">Combine</h2>
       <div className="mb-4">
-        <label className="block font-medium">Jacket Link (optional)</label>
-        <input {...register("jacketLink")} type="text" placeholder="Jacket Link" className="w-full p-2 border rounded-md" />
+        <label className="block font-medium">Jacket Link</label>
+        <input 
+          {...register("jacketLink", {
+            validate: (value) => !value || isValidUrl(value) || "Please enter a valid URL"
+          })}
+          type="text" 
+          placeholder="Jacket Link" 
+          className={`w-full p-2 border rounded-md ${errors.jacketLink ? 'border-red-500' : ''}`}
+        />
+        {errors.jacketLink && <p className="text-red-500 text-sm mt-1">{errors.jacketLink.message}</p>}
       </div>
 
       <h2 className="text-xl font-bold mt-6 mb-4">Shoes</h2>
       <div className="mb-4">
-        <label className="block font-medium">Shoes Link (optional)</label>
-        <input {...register("shoesLink")} type="text" placeholder="Shoes Link" className="w-full p-2 border rounded-md" />
+        <label className="block font-medium">Shoes Link</label>
+        <input 
+          {...register("shoesLink", {
+            validate: (value) => !value || isValidUrl(value) || "Please enter a valid URL"
+          })}
+          type="text" 
+          placeholder="Shoes Link" 
+          className={`w-full p-2 border rounded-md ${errors.shoesLink ? 'border-red-500' : ''}`}
+        />
+        {errors.shoesLink && <p className="text-red-500 text-sm mt-1">{errors.shoesLink.message}</p>}
       </div>
 
       <Button type="submit" className="w-full" isLoading={isLoading}>Upload to Supabase</Button>

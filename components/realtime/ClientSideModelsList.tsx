@@ -31,7 +31,7 @@ export default async function Index() {
         </Card>
         <Card>
           <CardHeader>
-            <CardTitle>Photo guidelines</CardTitle>
+            <CardTitle id="photo-guidelines">Photo guidelines</CardTitle>
             <div>
               Please follow these guidelines for best results
               <div className="flex flex-col md:flex-row" >
