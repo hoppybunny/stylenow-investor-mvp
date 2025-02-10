@@ -15,17 +15,17 @@ export const metadata = {
 export default function RootLayout({ children }: any) {
   return (
     <html lang="en">
-      <body className="min-h-screen flex flex-col">
-        <section>
+      <body className="min-h-screen flex flex-col bg-background text-foreground">
+        <section className="border-b border-neutral-200">
           <Suspense
             fallback={
-              <div className="flex w-full px-4 lg:px-40 py-4 items-center border-b text-center gap-8 justify-between h-[69px]" />
+              <div className="flex w-full px-4 lg:px-40 py-6 items-center text-center gap-8 justify-between h-[80px]" />
             }
           >
             <Navbar />
           </Suspense>
         </section>
-        <main className="flex flex-1 flex-col items-center py-16">
+        <main className="flex-1 fashion-container py-12 sm:py-20">
           {children}
         </main>
         <Footer />

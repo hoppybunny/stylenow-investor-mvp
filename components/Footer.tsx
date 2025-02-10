@@ -2,8 +2,31 @@ import Link from "next/link";
 
 export default function Footer() {
   return (
-    <footer className="text-center px-4 lg:px-40 py-4 h-12 sm:h-20 w-full sm:pt-2 pt-4 border-t mt-5 flex sm:flex-row flex-col justify-between items-center space-y-3 sm:mb-0 mb-3 border-gray-200">
-     Styled By Clara 2025 - All rights reserved
+    <footer className="w-full border-t border-neutral-200 bg-white/80 backdrop-blur-sm">
+      <div className="fashion-container py-6">
+        <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
+          <div className="flex items-center space-x-4">
+            <span className="text-sm text-neutral-600">
+              © 2025 Styled By Clara. All rights reserved.
+            </span>
+          </div>
+          
+          {/* <nav className="flex items-center space-x-6">
+            <Link 
+              href="/privacy" 
+              className="text-sm text-neutral-600 hover:text-neutral-900 transition-colors"
+            >
+              Privacy Policy
+            </Link>
+            <Link 
+              href="/terms" 
+              className="text-sm text-neutral-600 hover:text-neutral-900 transition-colors"
+            >
+              Terms of Service
+            </Link>
+          </nav> */}
+        </div>
+      </div>
     </footer>
   );
 }

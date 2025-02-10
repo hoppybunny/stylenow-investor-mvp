@@ -124,9 +124,9 @@ export default function ImageGallery() {
   }
 
   return (
-    <div className="p-4">
+    <div className="p-6">
       <AlertDialog open={itemToDelete !== null} onOpenChange={() => setItemToDelete(null)}>
-        <AlertDialogContent>
+        <AlertDialogContent className="bg-white/95 backdrop-blur-sm">
           <AlertDialogHeader>
             <AlertDialogTitle>Are you sure?</AlertDialogTitle>
             <AlertDialogDescription>
@@ -143,88 +143,156 @@ export default function ImageGallery() {
       </AlertDialog>
 
       {galleryItems.length === 0 ? (
-        <Card className="w-full">
-          <CardContent className="flex items-center justify-center h-64">
-            <p className="text-muted-foreground">No images to display</p>
-          </CardContent>
-        </Card>
+        <div className="text-center py-12 text-neutral-500">
+          <p>No images to display</p>
+        </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="fashion-grid">
           {galleryItems.map((item) => (
-            <Card key={item.id} className="overflow-hidden relative">
+            <Card key={item.id} className="group overflow-hidden relative bg-white/50 backdrop-blur-sm hover:shadow-lg transition-all duration-300">
               <button
                 onClick={() => setItemToDelete(item.id)}
-                className="absolute top-2 right-2 p-2 rounded-full bg-white/80 hover:bg-white/90 transition-colors"
+                className="absolute top-3 right-3 p-2 rounded-full bg-white/90 opacity-0 group-hover:opacity-100 transition-opacity duration-200 hover:bg-white z-10"
               >
-                <Trash2 className="h-5 w-5 text-red-600" />
+                <Trash2 className="h-4 w-4 text-red-600" />
               </button>
-              <CardContent className="p-4">
-                <img
-                  src={item.imageUrl}
-                  alt="Generated outfit"
-                  className="w-full h-48 object-cover mb-4 cursor-pointer"
-                  onClick={() => window.open(item.imageUrl, '_blank')}
-                />
-                <div className="space-y-2">
+              <CardContent className="p-4 space-y-4">
+                <div className="aspect-square overflow-hidden rounded-lg bg-neutral-100 relative">
+                  <img
+                    src={item.imageUrl}
+                    alt="Generated outfit"
+                    className="w-full h-full object-cover transition-transform duration-300 hover:scale-105 cursor-zoom-in"
+                    onClick={() => window.open(item.imageUrl, '_blank')}
+                    onError={(e) => {
+                      const target = e.target as HTMLImageElement;
+                      target.style.display = 'none';
+                      const container = target.parentElement;
+                      if (container) {
+                        const fallback = document.createElement('div');
+                        fallback.className = 'absolute inset-0 flex items-center justify-center';
+                        fallback.innerHTML = `
+                          <div class="flex flex-col items-center text-neutral-400">
+                            <svg class="w-8 h-8 mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                            </svg>
+                            <span class="text-sm">Image not found</span>
+                          </div>
+                        `;
+                        container.appendChild(fallback);
+                      }
+                    }}
+                  />
+                </div>
+                <div className="space-y-2 text-sm text-neutral-600">
                   {item.top_garment && (
-                    <p>Top: {
-                      (() => {
+                    <p className="flex items-center gap-2">
+                      <span className="font-medium">Top:</span>
+                      {(() => {
                         try {
                           const url = new URL(item.top_garment);
-                          return <a href={item.top_garment} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">{url.hostname}</a>;
+                          return (
+                            <a 
+                              href={item.top_garment} 
+                              target="_blank" 
+                              rel="noopener noreferrer" 
+                              className="text-blue-600 hover:text-blue-800 transition-colors truncate"
+                            >
+                              {url.hostname}
+                            </a>
+                          );
                         } catch {
-                          return <span>{item.top_garment.length > 50 ? `${item.top_garment.substring(0, 50)}...` : item.top_garment}</span>;
+                          return <span className="truncate">{item.top_garment}</span>;
                         }
-                      })()
-                    }</p>
+                      })()}
+                    </p>
                   )}
                   {item.bottom_garment && (
-                    <p>Bottom: {
-                      (() => {
+                    <p className="flex items-center gap-2">
+                      <span className="font-medium">Bottom:</span>
+                      {(() => {
                         try {
                           const url = new URL(item.bottom_garment);
-                          return <a href={item.bottom_garment} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">{url.hostname}</a>;
+                          return (
+                            <a 
+                              href={item.bottom_garment} 
+                              target="_blank" 
+                              rel="noopener noreferrer" 
+                              className="text-blue-600 hover:text-blue-800 transition-colors truncate"
+                            >
+                              {url.hostname}
+                            </a>
+                          );
                         } catch {
-                          return <span>{item.bottom_garment.length > 50 ? `${item.bottom_garment.substring(0, 50)}...` : item.bottom_garment}</span>;
+                          return <span className="truncate">{item.bottom_garment}</span>;
                         }
-                      })()
-                    }</p>
+                      })()}
+                    </p>
                   )}
                   {item.full_body_garment && (
-                    <p>Full Body: {
-                      (() => {
+                    <p className="flex items-center gap-2">
+                      <span className="font-medium">Full Body:</span>
+                      {(() => {
                         try {
                           const url = new URL(item.full_body_garment);
-                          return <a href={item.full_body_garment} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">{url.hostname}</a>;
+                          return (
+                            <a 
+                              href={item.full_body_garment} 
+                              target="_blank" 
+                              rel="noopener noreferrer" 
+                              className="text-blue-600 hover:text-blue-800 transition-colors truncate"
+                            >
+                              {url.hostname}
+                            </a>
+                          );
                         } catch {
-                          return <span>{item.full_body_garment.length > 50 ? `${item.full_body_garment.substring(0, 50)}...` : item.full_body_garment}</span>;
+                          return <span className="truncate">{item.full_body_garment}</span>;
                         }
-                      })()
-                    }</p>
+                      })()}
+                    </p>
                   )}
                   {item.jacket && (
-                    <p>Jacket: {
-                      (() => {
+                    <p className="flex items-center gap-2">
+                      <span className="font-medium">Jacket:</span>
+                      {(() => {
                         try {
                           const url = new URL(item.jacket);
-                          return <a href={item.jacket} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">{url.hostname}</a>;
+                          return (
+                            <a 
+                              href={item.jacket} 
+                              target="_blank" 
+                              rel="noopener noreferrer" 
+                              className="text-blue-600 hover:text-blue-800 transition-colors truncate"
+                            >
+                              {url.hostname}
+                            </a>
+                          );
                         } catch {
-                          return <span>{item.jacket.length > 50 ? `${item.jacket.substring(0, 50)}...` : item.jacket}</span>;
+                          return <span className="truncate">{item.jacket}</span>;
                         }
-                      })()
-                    }</p>
+                      })()}
+                    </p>
                   )}
                   {item.shoes && (
-                    <p>Shoes: {
-                      (() => {
+                    <p className="flex items-center gap-2">
+                      <span className="font-medium">Shoes:</span>
+                      {(() => {
                         try {
                           const url = new URL(item.shoes);
-                          return <a href={item.shoes} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">{url.hostname}</a>;
+                          return (
+                            <a 
+                              href={item.shoes} 
+                              target="_blank" 
+                              rel="noopener noreferrer" 
+                              className="text-blue-600 hover:text-blue-800 transition-colors truncate"
+                            >
+                              {url.hostname}
+                            </a>
+                          );
                         } catch {
-                          return <span>{item.shoes.length > 50 ? `${item.shoes.substring(0, 50)}...` : item.shoes}</span>;
+                          return <span className="truncate">{item.shoes}</span>;
                         }
-                      })()
-                    }</p>
+                      })()}
+                    </p>
                   )}
                 </div>
               </CardContent>
