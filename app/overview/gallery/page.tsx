@@ -8,25 +8,19 @@ import {
 } from "@/components/ui/card";
 
 export default async function Index() {
-
   return (
-    <div className="w-full max-w-2xl mx-auto">
-      <div
-        id="train-model-container"
-        className="flex flex-1 flex-col gap-2 px-2"
-      >
-        <Card>
-          <CardHeader>
-            <CardTitle>Image Gallery</CardTitle>
-            <CardDescription>
-              Take a look at the images you've created
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="grid gap-6">
-            <ImageGallery />
-          </CardContent>
-        </Card>
-      </div>
+    <div className="w-full max-w-none px-4 sm:px-6 lg:px-8">
+      <Card className="bg-white/50 backdrop-blur-sm">
+        <CardHeader className="px-6 sm:px-8">
+          <CardTitle>Image Gallery</CardTitle>
+          <CardDescription className="text-neutral-600">
+            Take a look at the images you've created
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="p-0">
+          <ImageGallery />
+        </CardContent>
+      </Card>
     </div>
   );
 }

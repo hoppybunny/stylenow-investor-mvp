@@ -1,15 +1,16 @@
 import Login from "../login/page";
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { cookies } from "next/headers";
+import { Database } from "@/types/supabase";
 
 export const dynamic = "force-dynamic";
 
-export default async function RootLayout({
+export default async function OverviewLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const supabase = createServerComponentClient({ cookies });
+  const supabase = createServerComponentClient<Database>({ cookies });
 
   const {
     data: { user },
@@ -19,5 +20,9 @@ export default async function RootLayout({
     return <Login />;
   }
 
-  return <div className="flex w-full flex-col px-4 lg:px-40">{children}</div>;
+  return (
+    <div className="w-full max-w-none">
+      {children}
+    </div>
+  );
 }

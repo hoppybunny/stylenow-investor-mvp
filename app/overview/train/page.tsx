@@ -1,4 +1,3 @@
-
 import {
   Card,
   CardContent,
@@ -7,23 +6,19 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 
-export default async function Index({ params }: { params: { pack : string } }) {
-  
+export default async function Index({ params }: { params: { pack: string } }) {
   return (
-    <div className="w-full max-w-2xl mx-auto">
-      <div
-        id="train-model-container"
-        className="flex flex-1 flex-col gap-2 px-2"
-      >
-        <Card>
+    <div className="fashion-container">
+      <div className="max-w-[800px] mx-auto">
+        <Card className="bg-white/50 backdrop-blur-sm">
           <CardHeader>
-            <CardTitle>Train Model</CardTitle>
-            <CardDescription>
+            <CardTitle>Train Your Model</CardTitle>
+            <CardDescription className="text-neutral-600">
               Upload images of yourself to get started.
             </CardDescription>
           </CardHeader>
-          <CardContent className="grid gap-6">
-            
+          <CardContent className="space-y-6">
+            {/* Your form content here */}
           </CardContent>
         </Card>
       </div>

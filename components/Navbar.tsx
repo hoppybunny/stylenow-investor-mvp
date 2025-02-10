@@ -17,6 +17,14 @@ import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import ClientSideCredits from "./realtime/ClientSideCredits";
 import { Button } from "./ui/button";
 import { Menu } from "lucide-react";
+import {
+  Sheet,
+  SheetClose,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "./ui/sheet";
 
 export const dynamic = "force-dynamic";
 
@@ -40,77 +48,100 @@ export default async function Navbar() {
     .single();
 
   return (
-    <div className="flex w-full px-4 lg:px-40 py-4 items-center border-b text-center gap-8 justify-between">
-      {user && (
+    <div className="fashion-container flex items-center justify-between py-4 w-full">
+      {/* Left Side - Mobile Menu & Logo */}
+      <div className="flex items-center gap-4">
+        {/* Mobile/Tablet Menu */}
         <div className="lg:hidden">
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost" size="icon">
+          <Sheet>
+            <SheetTrigger asChild>
+              <Button variant="ghost" size="icon" className="h-9 w-9">
                 <Menu className="h-5 w-5" />
               </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuItem asChild>
-                <Link href="/overview">Home</Link>
-              </DropdownMenuItem>
-              <DropdownMenuItem asChild>
-                <Link href="/overview/gallery">Gallery</Link>
-              </DropdownMenuItem>
-              {stripeIsConfigured && (
-                <DropdownMenuItem asChild>
-                  <Link href="/get-credits">Get Credits</Link>
-                </DropdownMenuItem>
-              )}
-            </DropdownMenuContent>
-          </DropdownMenu>
+            </SheetTrigger>
+            <SheetContent side="left" className="w-72">
+              <SheetHeader className="mb-4">
+                <SheetTitle className="text-left">Menu</SheetTitle>
+              </SheetHeader>
+              <nav className="flex flex-col space-y-4">
+                <SheetClose asChild>
+                  <Link href="/overview">
+                    <span className="block py-2 text-sm hover:text-neutral-500 transition-colors">
+                      Home
+                    </span>
+                  </Link>
+                </SheetClose>
+                <SheetClose asChild>
+                  <Link href="/overview/gallery">
+                    <span className="block py-2 text-sm hover:text-neutral-500 transition-colors">
+                      Gallery
+                    </span>
+                  </Link>
+                </SheetClose>
+                {stripeIsConfigured && (
+                  <SheetClose asChild>
+                    <Link href="/get-credits">
+                      <span className="block py-2 text-sm hover:text-neutral-500 transition-colors">
+                        Get Credits
+                      </span>
+                    </Link>
+                  </SheetClose>
+                )}
+              </nav>
+            </SheetContent>
+          </Sheet>
         </div>
-      )}
-      <div className="flex gap-2 h-full">
+
+        {/* Logo - Left aligned on desktop */}
         <Link href="/">
-          <h2 className="font-bold">Styled By Clara</h2>
+          <h2 className="text-xl font-light tracking-wider whitespace-nowrap">STYLED BY CLARA</h2>
         </Link>
       </div>
+
+      {/* Center - Navigation Links */}
       {user && (
-        <div className="hidden lg:flex flex-row gap-2">
-          <Link href="/overview">
-            <Button variant={"ghost"}>Home</Button>
-          </Link>
-          <Link href="/overview/gallery">
-            <Button variant={"ghost"}>Gallery</Button>
-          </Link>
-          {stripeIsConfigured && (
-            <Link href="/get-credits">
-              <Button variant={"ghost"}>Get Credits</Button>
+        <nav className="hidden lg:flex items-center justify-center">
+          <div className="flex items-center space-x-8">
+            <Link href="/overview">
+              <span className="text-sm hover:text-neutral-500 transition-colors">Home</span>
             </Link>
-          )}
-        </div>
+            <Link href="/overview/gallery">
+              <span className="text-sm hover:text-neutral-500 transition-colors">Gallery</span>
+            </Link>
+            {stripeIsConfigured && (
+              <Link href="/get-credits">
+                <span className="text-sm hover:text-neutral-500 transition-colors">Get Credits</span>
+              </Link>
+            )}
+          </div>
+        </nav>
       )}
-      <div className="flex gap-4 lg:ml-auto">
+
+      {/* Right Side - Auth & Credits */}
+      <div className="flex items-center gap-6">
         {!user && (
           <Link href="/login">
-            <Button variant={"ghost"}>Login / Signup</Button>
+            <Button variant="ghost" className="text-sm font-light">
+              Login / Signup
+            </Button>
           </Link>
         )}
         {user && (
-          <div className="flex flex-row gap-4 text-center align-middle justify-center">
+          <div className="flex items-center gap-6">
             {stripeIsConfigured && (
               <ClientSideCredits creditsRow={credits ? credits : null} />
             )}
             <DropdownMenu>
               <DropdownMenuTrigger asChild className="cursor-pointer">
-                <AvatarIcon height={24} width={24} className="text-primary" />
+                <AvatarIcon height={24} width={24} className="text-neutral-700" />
               </DropdownMenuTrigger>
-              <DropdownMenuContent className="w-56">
+              <DropdownMenuContent align="end">
                 <DropdownMenuLabel className="text-primary text-center overflow-hidden text-ellipsis">
                   {user.email}
                 </DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <form action="/auth/sign-out" method="post">
-                  <Button
-                    type="submit"
-                    className="w-full text-left"
-                    variant={"ghost"}
-                  >
+                  <Button type="submit" className="w-full" variant="ghost">
                     Log out
                   </Button>
                 </form>
