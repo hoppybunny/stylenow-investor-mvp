@@ -16,6 +16,7 @@ import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 
 import ClientSideCredits from "./realtime/ClientSideCredits";
 import { Button } from "./ui/button";
+import { Menu } from "lucide-react";
 
 export const dynamic = "force-dynamic";
 
@@ -40,6 +41,30 @@ export default async function Navbar() {
 
   return (
     <div className="flex w-full px-4 lg:px-40 py-4 items-center border-b text-center gap-8 justify-between">
+      {user && (
+        <div className="lg:hidden">
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" size="icon">
+                <Menu className="h-5 w-5" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuItem asChild>
+                <Link href="/overview">Home</Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem asChild>
+                <Link href="/overview/gallery">Gallery</Link>
+              </DropdownMenuItem>
+              {stripeIsConfigured && (
+                <DropdownMenuItem asChild>
+                  <Link href="/get-credits">Get Credits</Link>
+                </DropdownMenuItem>
+              )}
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
+      )}
       <div className="flex gap-2 h-full">
         <Link href="/">
           <h2 className="font-bold">Styled By Clara</h2>
@@ -50,9 +75,9 @@ export default async function Navbar() {
           <Link href="/overview">
             <Button variant={"ghost"}>Home</Button>
           </Link>
-            <Link href="/overview/gallery">
-              <Button variant={"ghost"}>Gallery</Button>
-            </Link>
+          <Link href="/overview/gallery">
+            <Button variant={"ghost"}>Gallery</Button>
+          </Link>
           {stripeIsConfigured && (
             <Link href="/get-credits">
               <Button variant={"ghost"}>Get Credits</Button>
