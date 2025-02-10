@@ -1,4 +1,4 @@
-import TrainModelZone from "@/components/TrainModelZone";
+
 import {
   Card,
   CardContent,
@@ -23,7 +23,7 @@ export default async function Index({ params }: { params: { pack : string } }) {
             </CardDescription>
           </CardHeader>
           <CardContent className="grid gap-6">
-            <TrainModelZone />
+            
           </CardContent>
         </Card>
       </div>

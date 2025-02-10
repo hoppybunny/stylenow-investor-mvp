@@ -26,7 +26,7 @@ export default async function Index() {
           </CardHeader>
           <CardContent className="grid gap-6">
             <TryOnForm/>
-            {/* <TrainModelZone /> */}
+
           </CardContent>
         </Card>
         <Card>
