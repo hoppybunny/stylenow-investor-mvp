@@ -401,10 +401,7 @@ export default function TryOnForm() {
                   <SwiperSlide key={index}>
                     <div 
                       className={cn(
-                        "relative h-full rounded-lg overflow-hidden cursor-pointer transition-all duration-200",
-                        selectedImage?.publicUrl === img.publicUrl 
-                          ? "ring-2 ring-neutral-900" 
-                          : "hover:ring-2 hover:ring-neutral-300"
+                        "relative h-full rounded-lg overflow-hidden cursor-pointer transition-all duration-200"
                       )}
                       onClick={() => setSelectedImage(img)}
                     >
@@ -412,7 +409,11 @@ export default function TryOnForm() {
                         <img 
                           src={img.publicUrl} 
                           alt={`Model ${index}`} 
-                          className="w-full h-full object-cover" 
+                          className={cn("w-full h-full object-cover", 
+                            selectedImage?.publicUrl === img.publicUrl 
+                          ? "opacity-100 neutral-900" 
+                          : "opacity-25 hover:opacity-80"
+                          )}
                           onError={(e) => {
                             const target = e.target as HTMLImageElement;
                             target.style.display = 'none';

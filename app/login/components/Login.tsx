@@ -108,15 +108,15 @@ export const Login = ({
           <p className="text-xs opacity-60">
             Sign in or create an account to get started.
           </p>
-          {/* <Button
+          <Button
             onClick={signInWithGoogle}
             variant={"outline"}
             className="font-semibold"
           >
-            <AiOutlineGoogle size={20} />
+            <AiOutlineGoogle size={20} className="mr-2" />
             Continue with Google
           </Button>
-          <OR /> */}
+          <OR />
 
           <form
             onSubmit={handleSubmit(onSubmit)}
