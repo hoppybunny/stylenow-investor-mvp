@@ -109,7 +109,7 @@ export default function ImageGallery() {
   if (isLoading) {
     // Display a loading icon when the data is being fetched
     return (
-      <div className="flex justify-center">
+      <div className="flex justify-center h-[50vh] items-center">
         <Icons.spinner className="h-4 w-4 animate-spin" />
       </div>
     );

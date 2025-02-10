@@ -126,6 +126,13 @@ redirect_uri = ""
 # or any other third-party OIDC providers.
 url = ""
 
+[auth.external.google]
+enabled = true
+client_id = "env(SUPABASE_AUTH_EXTERNAL_GOOGLE_CLIENT_ID)"
+secret = "env(SUPABASE_AUTH_EXTERNAL_GOOGLE_SECRET)"
+# Additional scopes (optional)
+additional_scopes = ["profile", "email"]
+
 [analytics]
 enabled = false
 port = 54327
