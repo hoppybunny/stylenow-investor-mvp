@@ -11,6 +11,7 @@ export default function Footer() {
             </span>
           </div>
           
+          {/* Uncomment if you want to add navigation links */}
           {/* <nav className="flex items-center space-x-6">
             <Link 
               href="/privacy" 

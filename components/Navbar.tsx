@@ -48,69 +48,72 @@ export default async function Navbar() {
     .single();
 
   return (
-    <div className="fashion-container flex items-center justify-between py-4">
-      {/* Mobile/Tablet Menu */}
-      <div className="lg:hidden">
-        <Sheet>
-          <SheetTrigger asChild>
-            <Button variant="ghost" size="icon" className="h-9 w-9">
-              <Menu className="h-5 w-5" />
-            </Button>
-          </SheetTrigger>
-          <SheetContent side="left" className="w-72">
-            <SheetHeader className="mb-4">
-              <SheetTitle className="text-left">Menu</SheetTitle>
-            </SheetHeader>
-            <nav className="flex flex-col space-y-4">
-              <SheetClose asChild>
-                <Link href="/overview">
-                  <span className="block py-2 text-sm hover:text-neutral-500 transition-colors">
-                    Home
-                  </span>
-                </Link>
-              </SheetClose>
-              <SheetClose asChild>
-                <Link href="/overview/gallery">
-                  <span className="block py-2 text-sm hover:text-neutral-500 transition-colors">
-                    Gallery
-                  </span>
-                </Link>
-              </SheetClose>
-              {stripeIsConfigured && (
+    <div className="fashion-container flex items-center justify-between py-4 w-full">
+      {/* Left Side - Mobile Menu & Logo */}
+      <div className="flex items-center gap-4">
+        {/* Mobile/Tablet Menu */}
+        <div className="lg:hidden">
+          <Sheet>
+            <SheetTrigger asChild>
+              <Button variant="ghost" size="icon" className="h-9 w-9">
+                <Menu className="h-5 w-5" />
+              </Button>
+            </SheetTrigger>
+            <SheetContent side="left" className="w-72">
+              <SheetHeader className="mb-4">
+                <SheetTitle className="text-left">Menu</SheetTitle>
+              </SheetHeader>
+              <nav className="flex flex-col space-y-4">
                 <SheetClose asChild>
-                  <Link href="/get-credits">
+                  <Link href="/overview">
                     <span className="block py-2 text-sm hover:text-neutral-500 transition-colors">
-                      Get Credits
+                      Home
                     </span>
                   </Link>
                 </SheetClose>
-              )}
-            </nav>
-          </SheetContent>
-        </Sheet>
-      </div>
+                <SheetClose asChild>
+                  <Link href="/overview/gallery">
+                    <span className="block py-2 text-sm hover:text-neutral-500 transition-colors">
+                      Gallery
+                    </span>
+                  </Link>
+                </SheetClose>
+                {stripeIsConfigured && (
+                  <SheetClose asChild>
+                    <Link href="/get-credits">
+                      <span className="block py-2 text-sm hover:text-neutral-500 transition-colors">
+                        Get Credits
+                      </span>
+                    </Link>
+                  </SheetClose>
+                )}
+              </nav>
+            </SheetContent>
+          </Sheet>
+        </div>
 
-      {/* Center Logo */}
-      <div className="absolute left-1/2 transform -translate-x-1/2 lg:static lg:translate-x-0">
+        {/* Logo - Left aligned on desktop */}
         <Link href="/">
           <h2 className="text-xl font-light tracking-wider whitespace-nowrap">STYLED BY CLARA</h2>
         </Link>
       </div>
 
-      {/* Desktop Navigation */}
+      {/* Center - Navigation Links */}
       {user && (
-        <nav className="hidden lg:flex items-center space-x-6">
-          <Link href="/overview">
-            <span className="text-sm hover:text-neutral-500 transition-colors">Home</span>
-          </Link>
-          <Link href="/overview/gallery">
-            <span className="text-sm hover:text-neutral-500 transition-colors">Gallery</span>
-          </Link>
-          {stripeIsConfigured && (
-            <Link href="/get-credits">
-              <span className="text-sm hover:text-neutral-500 transition-colors">Get Credits</span>
+        <nav className="hidden lg:flex items-center justify-center">
+          <div className="flex items-center space-x-8">
+            <Link href="/overview">
+              <span className="text-sm hover:text-neutral-500 transition-colors">Home</span>
             </Link>
-          )}
+            <Link href="/overview/gallery">
+              <span className="text-sm hover:text-neutral-500 transition-colors">Gallery</span>
+            </Link>
+            {stripeIsConfigured && (
+              <Link href="/get-credits">
+                <span className="text-sm hover:text-neutral-500 transition-colors">Get Credits</span>
+              </Link>
+            )}
+          </div>
         </nav>
       )}
 
@@ -124,7 +127,7 @@ export default async function Navbar() {
           </Link>
         )}
         {user && (
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-6">
             {stripeIsConfigured && (
               <ClientSideCredits creditsRow={credits ? credits : null} />
             )}

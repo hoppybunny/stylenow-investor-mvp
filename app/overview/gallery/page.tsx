@@ -9,20 +9,18 @@ import {
 
 export default async function Index() {
   return (
-    <div className="fashion-container">
-      <div className="max-w-[1200px] mx-auto">
-        <Card className="bg-white/50 backdrop-blur-sm">
-          <CardHeader>
-            <CardTitle>Image Gallery</CardTitle>
-            <CardDescription className="text-neutral-600">
-              Take a look at the images you've created
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <ImageGallery />
-          </CardContent>
-        </Card>
-      </div>
+    <div className="w-full max-w-none px-4 sm:px-6 lg:px-8">
+      <Card className="bg-white/50 backdrop-blur-sm">
+        <CardHeader className="px-6 sm:px-8">
+          <CardTitle>Image Gallery</CardTitle>
+          <CardDescription className="text-neutral-600">
+            Take a look at the images you've created
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="p-0">
+          <ImageGallery />
+        </CardContent>
+      </Card>
     </div>
   );
 }

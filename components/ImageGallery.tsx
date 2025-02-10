@@ -16,6 +16,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
+import { cn } from "@/lib/utils";
 
 // Define types for our gallery items
 type GalleryItem = {
@@ -124,7 +125,7 @@ export default function ImageGallery() {
   }
 
   return (
-    <div className="p-6">
+    <div className="sm:p-4">
       <AlertDialog open={itemToDelete !== null} onOpenChange={() => setItemToDelete(null)}>
         <AlertDialogContent className="bg-white/95 backdrop-blur-sm">
           <AlertDialogHeader>
@@ -147,7 +148,7 @@ export default function ImageGallery() {
           <p>No images to display</p>
         </div>
       ) : (
-        <div className="fashion-grid">
+        <div className="grid gap-8 grid-cols-1 sm:grid-cols-2">
           {galleryItems.map((item) => (
             <Card key={item.id} className="group overflow-hidden relative bg-white/50 backdrop-blur-sm hover:shadow-lg transition-all duration-300">
               <button
@@ -156,16 +157,27 @@ export default function ImageGallery() {
               >
                 <Trash2 className="h-4 w-4 text-red-600" />
               </button>
-              <CardContent className="p-4 space-y-4">
-                <div className="aspect-square overflow-hidden rounded-lg bg-neutral-100 relative">
+              <CardContent className="p-4 sm:p-8 space-y-6">
+                <div className="relative w-full aspect-square bg-neutral-100 rounded-lg overflow-hidden">
+                  <div className="absolute inset-0 flex items-center justify-center" id={`spinner-${item.id}`}>
+                    <Icons.spinner className="h-6 w-6 animate-spin text-neutral-400" />
+                  </div>
                   <img
                     src={item.imageUrl}
                     alt="Generated outfit"
-                    className="w-full h-full object-cover transition-transform duration-300 hover:scale-105 cursor-zoom-in"
+                    className={cn(
+                      "absolute inset-0 w-full h-full object-cover transition-all duration-300",
+                      "hover:scale-105 cursor-zoom-in"
+                    )}
                     onClick={() => window.open(item.imageUrl, '_blank')}
                     onError={(e) => {
                       const target = e.target as HTMLImageElement;
                       target.style.display = 'none';
+                      const spinnerId = `spinner-${item.id}`;
+                      const spinner = document.getElementById(spinnerId);
+                      if (spinner) {
+                        spinner.remove();
+                      }
                       const container = target.parentElement;
                       if (container) {
                         const fallback = document.createElement('div');
@@ -179,6 +191,13 @@ export default function ImageGallery() {
                           </div>
                         `;
                         container.appendChild(fallback);
+                      }
+                    }}
+                    onLoad={(e) => {
+                      const spinnerId = `spinner-${item.id}`;
+                      const spinner = document.getElementById(spinnerId);
+                      if (spinner) {
+                        spinner.remove();
                       }
                     }}
                   />
