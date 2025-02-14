@@ -247,10 +247,26 @@ export default function TryOnForm() {
 
       if (error) throw error;
 
-      // Show success modal instead of toast
+      // Prepare the payload for email notification.
+      const emailPayload = {
+        formId: galleryData.id, // or any identifier you have for the submission
+        timestamp: new Date().toISOString(),
+      };
+
+      // Invoke the Edge Function to send the email.
+      const { data: emailData, error: emailError } = await supabase.functions.invoke('send-email', {
+        body: emailPayload,
+      });
+
+      if (emailError) {
+        console.error("Error sending email:", emailError);
+        // Optionally, inform the user or handle logging.
+      }
+      
+      // Show success modal instead of toast.
       setShowSuccessModal(true);
       
-      // Set timeout to close modal and redirect
+      // Redirect after a brief timeout.
       setTimeout(() => {
         setShowSuccessModal(false);
         router.push("/");
