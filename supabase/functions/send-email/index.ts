@@ -43,7 +43,7 @@ Deno.serve(async (req) => {
     await new Promise<void>((resolve, reject) => {
       transport.sendMail({
         from: Deno.env.get('SMTP_FROM')!,
-        to: 'stylenow.clara@gmail.com', // Your team's email.
+        to: 'stylenow.clara@gmail.com', 
         subject: subject,
         text: text,
       }, error => {
