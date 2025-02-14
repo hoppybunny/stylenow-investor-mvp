@@ -4,7 +4,7 @@ import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
 import { Toaster } from "@/components/ui/toaster";
 import { Analytics } from "@vercel/analytics/react";
-import { Inter } from '@next/font/google';
+import { Inter } from "next/font/google";
 const inter = Inter({ subsets: ['latin'] });
 
 import "./globals.css";
